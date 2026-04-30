@@ -8,6 +8,8 @@ from auth import get_password_hash, verify_password, create_access_token, get_cu
 from models import User
 import os
 from dotenv import load_dotenv
+from billing.routes import router as billing_router
+from billing.webhooks import router as webhooks_router
 
 load_dotenv()
 
@@ -35,6 +37,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+app.include_router(billing_router)
+app.include_router(webhooks_router)
 
 @app.post("/register", response_model=Token)
 def register(user: UserCreate, db: Session = Depends(get_db)):

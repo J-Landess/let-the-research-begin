@@ -29,6 +29,9 @@ class UserLogin(BaseModel):
 class UserResponse(UserBase):
     id: int
     is_admin: bool
+    subscription_status: Optional[str] = None
+    stripe_customer_id: Optional[str] = None
+    current_period_end: Optional[datetime] = None
     created_at: datetime
     updated_at: Optional[datetime] = None
 
