@@ -29,12 +29,12 @@ A full-stack web application for Wiseman Psychedelics featuring user registratio
 - Bcrypt Password Hashing
 - Pydantic Data Validation
 - CORS Middleware
-- Rate Limiting
+- Security helpers in `security.py` (rate-limit helpers use `slowapi` but are not wired into `main.py` / `requirements.txt` yet)
 
 ### Frontend
-- React 18 with TypeScript
+- React 19 with TypeScript
 - Create React App (CRA)
-- React Router v6
+- React Router v7
 - Axios for API calls
 - Framer Motion for animations
 - Custom psychedelic CSS theme
@@ -81,8 +81,10 @@ A full-stack web application for Wiseman Psychedelics featuring user registratio
 
 ### Prerequisites
 - Python 3.11.9+
-- Node.js 16+
+- Node.js 18+ (recommended for React 19 / current tooling)
 - npm or yarn
+
+Also see [LOCAL_DEVELOPMENT.md](./LOCAL_DEVELOPMENT.md).
 
 ### Backend Setup
 
@@ -169,11 +171,16 @@ The app will be available at `http://localhost:3000`
 
 ## ⚙️ Environment Variables
 
-### Backend (.env)
+### Backend (`backend/env.example` → `.env`)
 ```
 SECRET_KEY=your-secret-key-here-change-this-in-production
 ALGORITHM=HS256
 DATABASE_URL=sqlite:///./wiseman_psychedelics.db
+```
+
+Optional runtime settings used by the app/deployment docs (add to `.env` if needed):
+
+```
 ENVIRONMENT=development
 FRONTEND_URL=http://localhost:3000
 ```
@@ -255,5 +262,5 @@ UPDATE users SET is_admin = 1 WHERE email = 'your-email@example.com';
 
 ## 📄 License
 
-This project is licensed under the MIT License.
- 
+No `LICENSE` file is committed; treat as private unless you add an explicit license.
+
