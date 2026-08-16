@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
+import { getUserErrorMessage } from '../api/api';
 
 interface ContactForm {
   name: string;
@@ -36,8 +37,10 @@ const Contact: React.FC = () => {
       setSubmitted(true);
       setFormData({ name: '', email: '', message: '' });
     } catch (err: any) {
-      const errorMessage = err.userMessage || err.response?.data?.detail || err.message || 'Failed to send message. Please try again.';
-      setError(errorMessage);
+      setError(getUserErrorMessage(
+        err,
+        'Failed to send your message. Please try again in a moment.'
+      ));
       console.error('Contact form error:', err);
     } finally {
       setLoading(false);

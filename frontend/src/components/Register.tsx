@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { authAPI, UserCreate } from '../api/api';
+import { authAPI, UserCreate, getUserErrorMessage } from '../api/api';
 
 const Register: React.FC = () => {
   const navigate = useNavigate();
@@ -25,7 +25,11 @@ const Register: React.FC = () => {
     const { name, value, type, checked } = e.target;
     setFormData(prev => ({
       ...prev,
-      [name]: type === 'checkbox' ? checked : value
+      [name]: type === 'checkbox'
+        ? checked
+        : name === 'age'
+          ? Number(value)
+          : value
     }));
   };
 
@@ -59,8 +63,10 @@ const Register: React.FC = () => {
       navigate('/home');
     } catch (err: any) {
       console.error('Registration error:', err);
-      const errorMessage = err.userMessage || err.response?.data?.detail || err.message || 'Registration failed';
-      setError(errorMessage);
+      setError(getUserErrorMessage(
+        err,
+        'Registration failed. Check that your email is valid, you are 18 or older, and your password is 6–72 characters.'
+      ));
     } finally {
       setLoading(false);
     }
