@@ -4,7 +4,7 @@ from datetime import datetime
 
 class UserBase(BaseModel):
     name: str = Field(..., min_length=1, max_length=200)
-    age: int = Field(..., ge=18, le=120)
+    age: int
     email: EmailStr
     phone: Optional[str] = None
     street: Optional[str] = None
