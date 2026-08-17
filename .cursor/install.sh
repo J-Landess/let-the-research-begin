@@ -24,7 +24,7 @@ if [ ! -f .env ]; then
   cat > .env <<'EOF'
 SECRET_KEY=dev-local-secret-key-please-change-this-32chars-minimum
 ALGORITHM=HS256
-DATABASE_URL=sqlite:///./wiseman_psychedelics.db
+DATABASE_URL=postgresql://postgres:postgres@localhost:5432/wiseman
 ENVIRONMENT=development
 FRONTEND_URL=http://localhost:3000
 EOF

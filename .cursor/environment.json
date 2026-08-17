@@ -2,10 +2,11 @@
   "name": "Wiseman Psychedelics",
   "user": "ubuntu",
   "install": "bash .cursor/install.sh",
+  "start": "sudo service docker start && (docker start wiseman-pg || docker run --name wiseman-pg -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=wiseman -p 5432:5432 -d postgres:16)",
   "terminals": [
     {
       "name": "backend",
-      "command": "cd backend && ./venv/bin/uvicorn main:app --host 0.0.0.0 --port 8000 --reload"
+      "command": "cd backend && until ./venv/bin/python -c \"import socket; s=socket.create_connection(('127.0.0.1', 5432), 1); s.close()\"; do sleep 1; done && ./venv/bin/uvicorn main:app --host 0.0.0.0 --port 8000 --reload"
     },
     {
       "name": "frontend",

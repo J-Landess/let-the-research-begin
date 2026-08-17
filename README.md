@@ -24,7 +24,7 @@ A full-stack web application for Wiseman Psychedelics featuring user registratio
 ### Backend
 - FastAPI (Python 3.11.9)
 - SQLAlchemy ORM
-- SQLite Database (production-ready)
+- PostgreSQL (SQLAlchemy; SQLite still used for in-memory tests)
 - JWT Authentication
 - Bcrypt Password Hashing
 - Pydantic Data Validation
@@ -44,7 +44,7 @@ A full-stack web application for Wiseman Psychedelics featuring user registratio
 ### Deployment
 - **Frontend**: Vercel (auto-deploy from GitHub)
 - **Backend**: Render (auto-deploy from GitHub)
-- **Database**: SQLite (Render) / PostgreSQL ready
+- **Database**: PostgreSQL (Render `wiseman-db`)
 - **Domain**: Custom domain support
 
 ## 📁 Project Structure
@@ -175,7 +175,7 @@ The app will be available at `http://localhost:3000`
 ```
 SECRET_KEY=your-secret-key-here-change-this-in-production
 ALGORITHM=HS256
-DATABASE_URL=sqlite:///./wiseman_psychedelics.db
+DATABASE_URL=postgresql://postgres:postgres@localhost:5432/wiseman
 ```
 
 Optional runtime settings used by the app/deployment docs (add to `.env` if needed):
@@ -197,7 +197,7 @@ For production deployment instructions, see [DEPLOYMENT.md](./DEPLOYMENT.md)
 **Quick Deploy:**
 - **Frontend**: Connect GitHub repo to Vercel
 - **Backend**: Connect GitHub repo to Render
-- **Database**: SQLite (Render) or PostgreSQL (Neon)
+- **Database**: PostgreSQL on Render (`wiseman-db`); Neon also works (`?sslmode=require`)
 
 ## 🛠️ Development
 
