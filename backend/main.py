@@ -1,5 +1,6 @@
 from fastapi import FastAPI, Depends, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 from database import get_db, engine
 from models import Base
@@ -10,6 +11,7 @@ import os
 from dotenv import load_dotenv
 from billing.routes import router as billing_router
 from billing.webhooks import router as webhooks_router
+from error_handlers import register_error_handlers
 
 load_dotenv()
 
@@ -40,6 +42,7 @@ app.add_middleware(
 
 app.include_router(billing_router)
 app.include_router(webhooks_router)
+register_error_handlers(app)
 
 @app.post("/register", response_model=Token)
 def register(user: UserCreate, db: Session = Depends(get_db)):
@@ -48,11 +51,17 @@ def register(user: UserCreate, db: Session = Depends(get_db)):
     if db_user:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Email already registered"
+            detail="Email already registered. Try logging in, or use a different email address."
         )
     
-    # Create new user
-    hashed_password = get_password_hash(user.password)
+    try:
+        hashed_password = get_password_hash(user.password)
+    except Exception:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Password could not be processed. Use 6–72 characters with no unusual encoding issues."
+        )
+
     db_user = User(
         name=user.name,
         age=user.age,
@@ -67,9 +76,25 @@ def register(user: UserCreate, db: Session = Depends(get_db)):
         is_subscribed=user.is_subscribed
     )
     
-    db.add(db_user)
-    db.commit()
-    db.refresh(db_user)
+    try:
+        db.add(db_user)
+        db.commit()
+        db.refresh(db_user)
+    except IntegrityError:
+        db.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Email already registered. Try logging in, or use a different email address."
+        )
+    except Exception:
+        db.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=(
+                "We couldn't create your account because of a server error. "
+                "Please try again in a moment."
+            )
+        )
     
     # Create access token
     access_token = create_access_token(data={"sub": user.email})
@@ -82,7 +107,7 @@ def login(user: UserLogin, db: Session = Depends(get_db)):
     if not db_user or not verify_password(user.password, db_user.hashed_password):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Incorrect email or password",
+            detail="Incorrect email or password. Check your credentials, or register if you don't have an account yet.",
             headers={"WWW-Authenticate": "Bearer"},
         )
     

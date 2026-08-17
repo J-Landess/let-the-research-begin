@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { authAPI, User } from '../api/api';
+import { authAPI, User, getUserErrorMessage } from '../api/api';
 
 const Home: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -13,8 +13,10 @@ const Home: React.FC = () => {
         const userData = await authAPI.getMe();
         setUser(userData);
       } catch (err: any) {
-        const errorMessage = err.userMessage || err.response?.data?.detail || err.message || 'Failed to load user data';
-        setError(errorMessage);
+        setError(getUserErrorMessage(
+          err,
+          'Failed to load your profile. Your session may have expired — try logging in again.'
+        ));
         console.error('Error fetching user:', err);
       } finally {
         setLoading(false);

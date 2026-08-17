@@ -71,7 +71,7 @@ class ErrorBoundary extends Component<Props, State> {
               marginBottom: '20px',
               fontSize: '2rem'
             }}>
-              Something went wrong
+              This page hit an unexpected error
             </h1>
             
             <p style={{ 
@@ -79,7 +79,9 @@ class ErrorBoundary extends Component<Props, State> {
               marginBottom: '30px',
               fontSize: '1.1rem'
             }}>
-              We're sorry, but something unexpected happened. Please try refreshing the page.
+              The app crashed while rendering this screen. Refreshing usually fixes a one-off glitch.
+              If it happens again on register or login, confirm your email is a full address (not a username)
+              and that the API is reachable.
             </p>
             
             <div style={{ marginBottom: '30px' }}>

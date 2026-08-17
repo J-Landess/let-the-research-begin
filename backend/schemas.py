@@ -1,9 +1,9 @@
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, Field, field_validator
 from typing import Optional
 from datetime import datetime
 
 class UserBase(BaseModel):
-    name: str
+    name: str = Field(..., min_length=1, max_length=200)
     age: int
     email: EmailStr
     phone: Optional[str] = None
@@ -14,13 +14,16 @@ class UserBase(BaseModel):
     country: Optional[str] = None
     is_subscribed: bool = False
 
+    @field_validator("name")
+    @classmethod
+    def name_not_blank(cls, value: str) -> str:
+        cleaned = value.strip()
+        if not cleaned:
+            raise ValueError("Name is required")
+        return cleaned
+
 class UserCreate(UserBase):
-    password: str
-    
-    def __init__(self, **data):
-        super().__init__(**data)
-        if len(self.password) > 72:
-            raise ValueError("Password cannot be longer than 72 characters")
+    password: str = Field(..., min_length=6, max_length=72)
 
 class UserLogin(BaseModel):
     email: EmailStr

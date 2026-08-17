@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { authAPI, UserLogin } from '../api/api';
+import { authAPI, UserLogin, getUserErrorMessage } from '../api/api';
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
@@ -31,8 +31,10 @@ const Login: React.FC = () => {
       navigate('/home');
     } catch (err: any) {
       console.error('Login error:', err);
-      const errorMessage = err.userMessage || err.response?.data?.detail || err.message || 'Login failed';
-      setError(errorMessage);
+      setError(getUserErrorMessage(
+        err,
+        'Login failed. Check your email and password, or register if you do not have an account yet.'
+      ));
     } finally {
       setLoading(false);
     }
