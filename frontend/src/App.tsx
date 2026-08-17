@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
+import { Analytics } from '@vercel/analytics/react';
 import './styles/theme.css';
 import './styles/navbar.css';
 import ErrorBoundary from './components/ErrorBoundary';
@@ -72,6 +73,7 @@ const App: React.FC = () => {
             </Routes>
           </AnimatePresence>
         </div>
+        <Analytics />
       </Router>
     </ErrorBoundary>
   );
