@@ -23,7 +23,12 @@ Run both frontend and backend locally.
 ```bash
 docker run --name wiseman-pg -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=wiseman -p 5432:5432 -d postgres:16
 ```
-Point `backend/.env` at `postgresql://postgres:postgres@localhost:5432/wiseman` (see `backend/env.example`).
+Point `backend/.env` at `postgresql://postgres:postgres@localhost:5432/wiseman` (see `backend/env.example`), then apply schema migrations:
+
+```bash
+cd backend
+./venv/bin/alembic upgrade head
+```
 
 #### 2. Start Local Backend
 ```bash

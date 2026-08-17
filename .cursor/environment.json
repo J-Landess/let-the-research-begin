@@ -6,7 +6,7 @@
   "terminals": [
     {
       "name": "backend",
-      "command": "cd backend && until ./venv/bin/python -c \"import socket; s=socket.create_connection(('127.0.0.1', 5432), 1); s.close()\"; do sleep 1; done && ./venv/bin/uvicorn main:app --host 0.0.0.0 --port 8000 --reload"
+      "command": "cd backend && until ./venv/bin/python -c \"import socket; s=socket.create_connection(('127.0.0.1', 5432), 1); s.close()\"; do sleep 1; done && ./venv/bin/alembic upgrade head && ./venv/bin/uvicorn main:app --host 0.0.0.0 --port 8000 --reload"
     },
     {
       "name": "frontend",

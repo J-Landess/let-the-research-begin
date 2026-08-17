@@ -110,7 +110,12 @@ cp env.example .env
 # Edit .env with your SECRET_KEY and other settings
 ```
 
-5. Run the development server:
+5. Apply database migrations (Postgres must be running; see [LOCAL_DEVELOPMENT.md](./LOCAL_DEVELOPMENT.md)):
+```bash
+alembic upgrade head
+```
+
+6. Run the development server:
 ```bash
 uvicorn main:app --reload
 ```

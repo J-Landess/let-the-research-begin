@@ -1,8 +1,7 @@
 from fastapi import FastAPI, Depends, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
-from database import get_db, engine
-from models import Base
+from database import get_db
 from schemas import UserCreate, UserLogin, UserResponse, Token
 from auth import get_password_hash, verify_password, create_access_token, get_current_user, get_current_admin_user
 from models import User
@@ -12,9 +11,6 @@ from billing.routes import router as billing_router
 from billing.webhooks import router as webhooks_router
 
 load_dotenv()
-
-# Create database tables
-Base.metadata.create_all(bind=engine)
 
 # Initialize FastAPI app
 app = FastAPI(
