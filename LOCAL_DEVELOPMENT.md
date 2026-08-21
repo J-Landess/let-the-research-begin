@@ -19,7 +19,18 @@ The app will run at `http://localhost:3000` and connect to `https://wiseman-api-
 ### Option 2: Run Full Local Stack
 Run both frontend and backend locally.
 
-#### 1. Start Local Backend
+#### 1. Start Local Postgres
+```bash
+docker run --name wiseman-pg -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=wiseman -p 5432:5432 -d postgres:16
+```
+Point `backend/.env` at `postgresql://postgres:postgres@localhost:5432/wiseman` (see `backend/env.example`), then apply schema migrations:
+
+```bash
+cd backend
+./venv/bin/alembic upgrade head
+```
+
+#### 2. Start Local Backend
 ```bash
 cd backend
 source venv/bin/activate  # On Windows: venv\Scripts\activate
@@ -27,7 +38,7 @@ uvicorn main:app --reload
 ```
 Backend runs at: `http://localhost:8000`
 
-#### 2. Start Local Frontend
+#### 3. Start Local Frontend
 In a new terminal:
 ```bash
 cd frontend
@@ -119,7 +130,7 @@ Create `backend/.env`:
 ```env
 SECRET_KEY=your-secret-key-here-change-this-in-production
 ALGORITHM=HS256
-DATABASE_URL=sqlite:///./wiseman_psychedelics.db
+DATABASE_URL=postgresql://postgres:postgres@localhost:5432/wiseman
 ENVIRONMENT=development
 FRONTEND_URL=http://localhost:3000
 ```
