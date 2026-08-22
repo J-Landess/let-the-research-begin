@@ -31,6 +31,8 @@ app.add_middleware(
     # Allow exact deployed frontend and local dev
     allow_origins=[
         "https://wiseman.vercel.app",
+        "https://www.wisemenresearch.org",
+        "https://wisemenresearch.org",
         "http://localhost:3000",
     ],
     # Also allow any vercel.app subdomain (for previews)

@@ -20,19 +20,22 @@ def generate_secret_key(length: int = 32) -> str:
     return ''.join(secrets.choice(alphabet) for _ in range(length))
 
 def get_cors_origins() -> List[str]:
-    """Get CORS origins based on environment"""
-    if os.getenv("ENVIRONMENT") == "production":
-        # Production: Only allow your domain
-        frontend_url = os.getenv("FRONTEND_URL", "https://yourdomain.com")
-        return [frontend_url]
-    else:
-        # Development: Allow localhost
-        return [
-            "http://localhost:3000",
-            "http://127.0.0.1:3000",
-            "https://localhost:3000",
-            "https://127.0.0.1:3000"
-        ]
+    """Allowed browser origins. FRONTEND_URL may be a comma-separated list."""
+    origins = [
+        "https://www.wisemenresearch.org",
+        "https://wisemenresearch.org",
+        "https://wiseman.vercel.app",
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+        "https://localhost:3000",
+        "https://127.0.0.1:3000",
+    ]
+    extra = os.getenv("FRONTEND_URL", "")
+    for origin in extra.split(","):
+        origin = origin.strip().rstrip("/")
+        if origin and origin not in origins:
+            origins.append(origin)
+    return origins
 
 def setup_security_middleware(app: FastAPI) -> None:
     """Set up security middleware for the FastAPI app"""
