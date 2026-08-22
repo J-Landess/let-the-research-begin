@@ -1,0 +1,6 @@
+Alembic migrations for the Wiseman Psychedelics API.
+
+Run from `backend/` with `DATABASE_URL` set (see `.env` / `env.example`):
+
+    ./venv/bin/alembic upgrade head
+    ./venv/bin/alembic revision --autogenerate -m "describe the change"
