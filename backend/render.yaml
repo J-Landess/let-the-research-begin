@@ -22,9 +22,9 @@ services:
           name: wiseman-db
           property: connectionString
       - key: FRONTEND_URL
-        value: https://your-vercel-app.vercel.app
+        value: https://www.wisemenresearch.org,https://wisemenresearch.org
       - key: TRUSTED_HOSTS
-        value: your-domain.com,api.your-domain.com
+        value: wiseman-api-gpfp.onrender.com,*.onrender.com
 
 databases:
   - name: wiseman-db

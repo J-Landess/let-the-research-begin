@@ -9,6 +9,7 @@ import os
 from dotenv import load_dotenv
 from billing.routes import router as billing_router
 from billing.webhooks import router as webhooks_router
+from security import get_cors_origins
 
 load_dotenv()
 
@@ -19,18 +20,13 @@ app = FastAPI(
     description="Consciousness research and psychedelic education platform API"
 )
 
-# CORS middleware
+# CORS middleware — must include production www + apex or browsers drop OPTIONS preflight
 app.add_middleware(
     CORSMiddleware,
-    # Allow exact deployed frontend and local dev
-    allow_origins=[
-        "https://wiseman.vercel.app",
-        "http://localhost:3000",
-    ],
-    # Also allow any vercel.app subdomain (for previews)
+    allow_origins=get_cors_origins(),
     allow_origin_regex=r"https://.*\.vercel\.app$",
     allow_credentials=True,
-    allow_methods=["*"],
+    allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allow_headers=["*"],
 )
 
